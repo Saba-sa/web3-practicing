@@ -19,7 +19,7 @@ async function main() {
   // console.log("Deployment in progress...");
   // const contract = await contractFactory.deploy();
   // const transactionReceipt = await contract.deploymentTransaction.wait(1);
-  const nonce = await wallet.getTransactionCount();
+  const nonce = await provider.getTransactionCount(wallet.address);
   const tx = {
     nounce: nonce,
     gasPrice: "20000000000",
