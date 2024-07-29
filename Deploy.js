@@ -3,9 +3,8 @@ const fs = require("fs-extra");
 
 async function main() {
   const provider = ethers.getDefaultProvider("http://127.0.0.1:7545");
-
   const wallet = new ethers.Wallet(
-    "0x8074ca64b32fd3475dbad40ff39c354d7a5e66be43e3ffba567ac4d39418894b",
+    "0x2eb2a6d824da75b57761fc7cf6e8a105e56d3c16c98bc0962a899ddb4c9815f5",
     provider
   );
 
@@ -21,7 +20,7 @@ async function main() {
   // const transactionReceipt = await contract.deploymentTransaction.wait(1);
   const nonce = await provider.getTransactionCount(wallet.address);
   const tx = {
-    nounce: nonce,
+    nonce: nonce,
     gasPrice: "20000000000",
     gasLimit: "1000000",
     to: null,
@@ -30,11 +29,14 @@ async function main() {
     chainId: 5777,
   };
   // const signedTxResponse = await wallet.signTransaction(tx);
-  const sendTxResponse = await wallet.signTransaction(tx);
-  await sendTxResponse.startsWith(1);
-  console.log(sendTxResponse);
+  try {
+    const sendTxResponse = await wallet.sendTransaction(tx);
+    await sendTxResponse.wait(1);
+    console.log(sendTxResponse);
+  } catch (err) {
+    console.error("error while sending the transaction", err);
+  }
 }
-
 main()
   .then(() => process.exit(0))
   .catch((err) => {
